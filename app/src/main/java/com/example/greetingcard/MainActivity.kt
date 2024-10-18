@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.greetingcard.ui.theme.GreetingCardTheme
 
@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding),
                         onExplicitButtonClick = {
                             val intent = Intent(this, SecondActivity::class.java)
-                            startActivity(intent) // Explicit Intent to start SecondActivity
+                            startActivity(intent)
                         },
                         onImplicitButtonClick = {
                             val intent = Intent().apply {
@@ -30,7 +30,11 @@ class MainActivity : ComponentActivity() {
                                 putExtra(Intent.EXTRA_TEXT, "Sharing from the app")
                                 type = "text/plain"
                             }
-                            startActivity(Intent.createChooser(intent, "Share with")) // Implicit Intent to share
+                            startActivity(Intent.createChooser(intent, "Share with"))
+                        },
+                        onViewImageActivityClick = {
+                            val intent = Intent(this, ImageCaptureActivity::class.java)
+                            startActivity(intent)
                         }
                     )
                 }
@@ -40,14 +44,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, onExplicitButtonClick: () -> Unit, onImplicitButtonClick: () -> Unit) {
-    Surface(color = Color.Cyan) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    onExplicitButtonClick: () -> Unit,
+    onImplicitButtonClick: () -> Unit,
+    onViewImageActivityClick: () -> Unit
+) {
+    Surface {
         Column(modifier = modifier.padding(24.dp)) {
-            Text(
-                text = "Hi, my name is Austin! Student ID: 1413857",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Black
-            )
+            Text(text = "Hi, my name is Austin! Student ID: 1413857")
             Spacer(modifier = Modifier.height(24.dp))
             Button(onClick = onExplicitButtonClick) {
                 Text(text = "Start Activity Explicitly")
@@ -56,6 +61,18 @@ fun MainScreen(modifier: Modifier = Modifier, onExplicitButtonClick: () -> Unit,
             Button(onClick = onImplicitButtonClick) {
                 Text(text = "Start Activity Implicitly")
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = onViewImageActivityClick) {
+                Text(text = "View Image Activity")
+            }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun MainScreenPreview() {
+    GreetingCardTheme {
+        MainScreen(onExplicitButtonClick = {}, onImplicitButtonClick = {}, onViewImageActivityClick = {})
     }
 }
