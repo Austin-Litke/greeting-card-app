@@ -33,7 +33,7 @@ class SecondActivity : ComponentActivity() {
 fun ChallengesScreen(modifier: Modifier = Modifier, onBackButtonClick: () -> Unit) {
     Surface(color = Color.White) {
         Column(modifier = modifier.padding(24.dp)) {
-            Text(text = "Mobile Software Engineering Challenges:", style = MaterialTheme.typography.bodyLarge) // Fixed text style
+            Text(text = "Mobile Software Engineering Challenges:", style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(16.dp))
             val challenges = listOf(
                 "Device Fragmentation",

@@ -7,6 +7,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- Define Custom Permission -->
+    <permission
+        android:name="com.example.greetingcard.MSE412"
+        android:protectionLevel="dangerous" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -25,16 +30,18 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- Image Capture Activity -->
         <activity
             android:name=".ImageCaptureActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
 
+        <!-- Second Activity with Custom Permission -->
         <activity
             android:name=".SecondActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:permission="com.example.greetingcard.MSE412" />
 
+        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">

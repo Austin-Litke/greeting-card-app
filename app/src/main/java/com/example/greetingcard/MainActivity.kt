@@ -1,18 +1,40 @@
 package com.example.greetingcard
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.example.greetingcard.ui.theme.GreetingCardTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission granted; start the SecondActivity
+            startSecondActivity()
+        } else {
+            // Permission denied
+            Toast.makeText(
+                this,
+                "Permission denied. Cannot access the Second Activity.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -21,8 +43,7 @@ class MainActivity : ComponentActivity() {
                     MainScreen(
                         modifier = Modifier.padding(innerPadding),
                         onExplicitButtonClick = {
-                            val intent = Intent(this, SecondActivity::class.java)
-                            startActivity(intent)
+                            checkAndRequestPermission()
                         },
                         onImplicitButtonClick = {
                             val intent = Intent().apply {
@@ -40,6 +61,27 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun checkAndRequestPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this,
+                "com.example.greetingcard.MSE412"
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // Permission is already granted; start the SecondActivity
+                startSecondActivity()
+            }
+            else -> {
+                // Request the custom permission
+                requestPermissionLauncher.launch("com.example.greetingcard.MSE412")
+            }
+        }
+    }
+
+    private fun startSecondActivity() {
+        val intent = Intent(this, SecondActivity::class.java)
+        startActivity(intent)
     }
 }
 
